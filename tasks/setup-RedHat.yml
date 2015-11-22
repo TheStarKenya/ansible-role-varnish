@@ -3,7 +3,7 @@
   yum:
     name: varnish
     state: present
-    enablerepo: "epel"
+    enablerepo: "{{ varnish_enablerepo }}"
 
 - name: Copy Varnish configuration.
   template:

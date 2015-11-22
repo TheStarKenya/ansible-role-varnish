@@ -17,7 +17,7 @@
   when: varnish_use_default_vcl
   notify: restart varnish
 
-- name: Copy varnish secret.
+- name: Copy Varnish secret.
   template:
     src: secret.j2
     dest: "{{ varnish_config_path }}/secret"
@@ -27,4 +27,7 @@
   notify: restart varnish
 
 - name: Ensure Varnish is started and set to run on startup.
-  service: name=varnish state=started enabled=yes
+  service:
+    name: varnish
+    state: started
+    enabled: yes
