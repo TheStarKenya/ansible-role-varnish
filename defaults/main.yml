@@ -1,6 +1,6 @@
 ---
 # Pass in a comma-separated list of repos to use (e.g. "remi,epel").
-varnish_enablerepo: "epel"
+varnish_enablerepo: ""
 
 varnish_admin_listen_host: "127.0.0.1"
 varnish_admin_listen_port: "6082"
