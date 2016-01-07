@@ -1,33 +1,29 @@
 ---
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
 - include: setup-RedHat.yml
   when: ansible_os_family == "RedHat"
 
-- name: Ensure Varnish config path exists.
-  file:
-    path: "{{ varnish_config_path }}"
-    state: directory
+- name: Create Varnish config dir.
+  file: path={{ varnish_config_dir }} state=directory
 
-- name: Copy Varnish default VCL.
+- name: Copy Varnish default.vcl.
   template:
-    src: "{{ varnish_default_vcl_template_path }}"
-    dest: "{{ varnish_config_path }}/default.vcl"
+    src: default.vcl.j2
+    dest: "{{ varnish_config_dir }}/default.vcl"
     owner: root
     group: root
-    mode: 0644
-  when: varnish_use_default_vcl
+  when: varnish_vcl_use_template
   notify: restart varnish
 
 - name: Copy Varnish secret.
   template:
     src: secret.j2
-    dest: "{{ varnish_config_path }}/secret"
+    dest: "{{ varnish_config_dir }}/secret"
     owner: root
     group: root
-    mode: 0644
   notify: restart varnish
 
-- name: Ensure Varnish is started and set to run on startup.
-  service:
-    name: varnish
-    state: started
-    enabled: yes
+- name: Start and enable Varnish.
+  service: name=varnish state=started enabled=yes

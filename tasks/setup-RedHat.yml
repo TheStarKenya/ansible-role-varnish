@@ -1,14 +1,14 @@
 ---
-- name: Install Varnish.
-  yum:
-    name: varnish
-    state: present
-    enablerepo: "{{ varnish_enablerepo }}"
+- name: Define varnish_enablerepo.
+  set_fact: varnish_enablerepo={{ __varnish_enablerepo }}
+  when: varnish_enablerepo is not defined
 
-- name: Copy Varnish configuration.
+- name: Install Varnish.
+  yum: name=varnish state=present enablerepo={{ varnish_enablerepo }}
+
+- name: Copy Varnish config.
   template:
     src: varnish.params.j2
     dest: /etc/varnish/varnish.params
     owner: root
     group: root
-    mode: 0644
