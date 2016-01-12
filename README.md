@@ -16,7 +16,6 @@ Available variables are listed below, along with default values (see `defaults/m
 varnish_admin_listen_host: 127.0.0.1
 varnish_admin_listen_port: 6082
 
-varnish_config_dir: /etc/varnish
 varnish_listen_port: 80
 varnish_secret: 14bac2e6-1e34-4770-8078-974373b76c90
 varnish_storage: file,/var/lib/varnish/varnish_storage.bin,256M
