@@ -1,12 +1,33 @@
 ---
-- name: Include OS-specific variables.
+- name: include os-specific variables
   include_vars: "{{ ansible_os_family }}.yml"
 
 - include: setup-RedHat.yml
   when: ansible_os_family == "RedHat"
 
-- include: configure-RedHat.yml
-  when: ansible_os_family == "RedHat"
+- name: copy varnish config
+  template:
+    src: varnish.params.j2
+    dest: /etc/varnish/varnish.params
+    owner: root
+    group: root
 
-- name: Start and enable Varnish.
+- name: copy varnish default.vcl
+  template:
+    src: default.vcl.j2
+    dest: /etc/varnish/default.vcl
+    owner: root
+    group: root
+  when: varnish_vcl_use_template
+  notify: restart varnish
+
+- name: copy varnish secret
+  template:
+    src: secret.j2
+    dest: /etc/varnish/secret
+    owner: root
+    group: root
+  notify: restart varnish
+
+- name: start and enable varnish
   service: name=varnish state=started enabled=yes
